@@ -1,0 +1,52 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: thai_kedmanee
+  name: 泰語鍵盤
+  version: "2026.11.12"
+  author:
+    - Flex Liu (劉鵬飛)
+  description: |-
+    泰國國家標準 Kedmanee (TIS 820-2538) 鍵盤布局直輸方案
+    無需切換 Windows 系統語言欄，在 Rime 內直接按標準泰文鍵位盲打
+    按鍵即上屏（如同系統原生泰語鍵盤），空格鍵輸出空格
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ กขค, Eng ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+
+engine:
+  processors:
+    - ascii_composer
+    - key_binder
+    - speller
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - abc_segmentor
+    - fallback_segmentor
+  translators:
+    - table_translator
+
+speller:
+  alphabet: "1234567890-=!@#$%^&*()_+qwertyuiop[]\\QWERTYUIOP{}|asdfghjkl;'ASDFGHJKL:\"zxcvbnm,./ZXCVBNM<>?"
+  initials: "1234567890-=!@#$%^&*()_+qwertyuiop[]\\QWERTYUIOP{}|asdfghjkl;'ASDFGHJKL:\"zxcvbnm,./ZXCVBNM<>?"
+  auto_select: true
+  max_code_length: 1
+
+translator:
+  dictionary: thai_kedmanee
+  enable_sentence: false
+  enable_user_dict: false
+  enable_completion: false
+  comment_format:
+    - xform/^~//
+
+key_binder:
+  import_preset: default

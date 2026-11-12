@@ -1,0 +1,13 @@
+# Rime build artifacts and user databases
+build/
+*.userdb/
+*.userdb.txt
+*.bin
+installation.yaml
+user.yaml
+sync/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.venv/

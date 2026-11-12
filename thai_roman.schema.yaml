@@ -1,0 +1,124 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: thai_roman
+  name: 泰語拼音
+  version: "2026.11.12"
+  author:
+    - Flex Liu (劉鵬飛)
+  description: |-
+    泰語羅馬音（RTGS / Paiboon 兼容）輸入方案
+    支援忽略聲調盲打、長短元音容錯、首字母簡拼、44 輔音及元音單字拆字輸入
+    聲調數字：1=中平 (สามัญ) 2=低平 (เอก) 3=降調 (โท) 4=高平 (ตรี) 5=升調 (จัตวา)
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ ไทย, Eng ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: ascii_punct
+    reset: 0
+    states: [ 。，, ．， ]
+  - name: show_pronunciation
+    reset: 1
+    states: [ 無注音, 顯示注音 ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+  filters:
+    - simplifier@hide_pronunciation
+    - uniquifier
+
+hide_pronunciation:
+  option_name: show_pronunciation
+  tips: none
+  tags: [ abc ]
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba12345
+  initials: zyxwvutsrqponmlkjihgfedcba
+  delimiter: " '"
+  algebra:
+    # 1. 常見拼寫習慣容錯 (Paiboon / 英語習慣 -> RTGS 標準底層)
+    - derive/uea/eua/             # เอือ: uea <-> eua
+    - derive/ue(?!a)/eu/          # อือ/อึ: ue <-> eu
+    - derive/ae/ea/               # แอ: ae <-> ea
+    - derive/oe/er/               # เออ: oe <-> er
+    - derive/([kptbdmngnsrlwyfh])o([ptkmnng1-5])/$1or$2/  # ออ 閉音節容錯: khop <-> khorp, thon <-> thorn
+    - derive/([kptbdmngnsrlwyfh])oo([1-5])/$1or$2/        # ออ 開音節容錯: khoo <-> khor
+
+    # 2. 清濁/不送氣塞音拼寫容錯 (Paiboon 習慣: bp -> p, dt -> t, g -> k, j -> ch)
+    - derive/^p(?!h)/bp/
+    - derive/^t(?!h)/dt/
+    - derive/^k(?!h)/g/
+    - derive/^ch/j/
+
+    # 3. 長短元音容錯 (長元音雙寫可簡打為單字母：aa->a, ii->i, uu->u, ee->e, oo->o)
+    - derive/aa/a/
+    - derive/ii/i/
+    - derive/uu/u/
+    - derive/ee/e/
+    - derive/oo/o/
+
+    # 4. 忽略聲調輸入（預設支援只打輔音+元音盲打，最符合日常輸入習慣）
+    - derive/[1-5]$//
+
+    # 5. 首字母簡拼（如 swd -> สวัสดี, kk -> ขอบคุณ）
+    - abbrev/^([a-z]).+$/$1/
+    - abbrev/^([khptc]h).+$/$1/
+    - abbrev/^(ng).+$/$1/
+
+    # 6. 聲調符號快捷鍵映射（可選用 v/x/q/f/r 代替 1/2/3/4/5）
+    - derive/1$/v/
+    - derive/2$/x/
+    - derive/3$/q/
+    - derive/4$/f/
+    - derive/5$/r/
+
+translator:
+  dictionary: thai_roman
+  # 泰語發音提示開關（類似粵拼 spelling_hints）：
+  # 設為 8 時，8 個字以內的候選詞右側會顯示羅馬音+聲調提示；
+  # 若想關閉候選詞後的泰語發音提示，將此數值改為 0 即可。
+  spelling_hints: 8
+  comment_format:
+    - xform/^~//
+  preedit_format:
+    - xform/([a-z])v(\s|$)/${1}1$2/
+    - xform/([a-z])x(\s|$)/${1}2$2/
+    - xform/([a-z])q(\s|$)/${1}3$2/
+    - xform/([a-z])f(\s|$)/${1}4$2/
+    - xform/([a-z])r(\s|$)/${1}5$2/
+
+punctuator:
+  import_preset: default
+  half_shape:
+    "%": "%"
+    "*": "*"
+    "/": "/"
+    "\\": [ "฿", "ฯ", "ๆ", "๏", "๚", "๛" ]
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default

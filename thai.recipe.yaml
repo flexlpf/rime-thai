@@ -1,0 +1,14 @@
+# encoding: utf-8
+---
+recipe:
+  Rx: thai
+  args:
+  description: >-
+    Rime Thai Input Method (泰語輸入方案：泰語拼音 + 泰語標準鍵盤 Kedmanee)
+install_files: >-
+  thai_roman.schema.yaml
+  thai_roman.dict.yaml
+  thai_roman.chars.dict.yaml
+  thai_roman.words.dict.yaml
+  thai_kedmanee.schema.yaml
+  thai_kedmanee.dict.yaml

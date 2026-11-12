@@ -1,0 +1,216 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# thai_roman.chars - 泰語單字、44 輔音、元音部件、聲調與數字拆字詞庫
+#
+# 支援兩種單字輸入方式：
+#   1. 輸入輔音發音（如 k, kh, ch, s, t, th, p, ph）列出同音輔音
+#   2. 輸入傳統代表詞全稱（如 kokai -> ก, khokhai -> ข, khokhwai -> ค）精確定位唯一輔音
+#   3. 輸入 sara + 元音名（如 saraa -> า, sarai -> ิ/ี）或 mai + 聲調名（如 maiek -> ่）輸出部件
+
+---
+name: thai_roman.chars
+version: "2026.11.12"
+sort: by_weight
+use_preset_vocabulary: false
+...
+ก	k	1000
+ก	kokai	1000
+ก	ko1 kai2	1000
+ข	kh	950
+ข	khokhai	950
+ข	kho5 khai2	950
+ฃ	kh	100
+ฃ	khokhuat	100
+ฃ	kho5 khuat2	100
+ค	kh	980
+ค	khokhwai	980
+ค	kho1 khwaai1	980
+ฅ	kh	100
+ฅ	khokhon	100
+ฅ	kho1 khon1	100
+ฆ	kh	400
+ฆ	khorakhang	400
+ฆ	kho1 ra4 khang1	400
+ง	ng	990
+ง	ngongu	990
+ง	ngoo1 nguu1	990
+จ	ch	980
+จ	chochan	980
+จ	choo1 chaan1	980
+ฉ	ch	750
+ฉ	choching	750
+ฉ	choo5 ching2	750
+ช	ch	960
+ช	chochang	960
+ช	choo1 chaang4	960
+ซ	s	800
+ซ	soso	800
+ซ	soo1 soo3	800
+ฌ	ch	300
+ฌ	chochoe	300
+ฌ	choo1 choee1	300
+ญ	y	850
+ญ	yoying	850
+ญ	yoo1 ying5	850
+ฎ	d	450
+ฎ	dochada	450
+ฎ	doo1 cha4 daa1	450
+ฏ	t	450
+ฏ	topatak	450
+ฏ	too1 pa2 tak2	450
+ฐ	th	500
+ฐ	thothan	500
+ฐ	thoo5 thaan5	500
+ฑ	th	400
+ฑ	montho	400
+ฑ	thoo1 mon1 thoo1	400
+ฒ	th	350
+ฒ	thophuthao	350
+ฒ	thoo1 phuu3 thao3	350
+ณ	n	700
+ณ	nonen	700
+ณ	noo1 neen1	700
+ด	d	990
+ด	dodek	990
+ด	doo1 dek2	990
+ต	t	990
+ต	totao	990
+ต	too1 tao2	990
+ถ	th	880
+ถ	thothung	880
+ถ	thoo5 thung5	880
+ท	th	990
+ท	thothahan	990
+ท	thoo1 tha4 haan5	990
+ธ	th	820
+ธ	thothong	820
+ธ	thoo1 thong1	820
+น	n	990
+น	nonu	990
+น	noo1 nuu5	990
+บ	b	990
+บ	bobaimai	990
+บ	boo1 bai1 mai4	990
+ป	p	990
+ป	popla	990
+ป	poo1 plaa1	990
+ผ	ph	880
+ผ	phophueng	880
+ผ	phoo5 phueng3	880
+ฝ	f	800
+ฝ	fofa	800
+ฝ	foo5 faa5	800
+พ	ph	980
+พ	phophan	980
+พ	phoo1 phaan1	980
+ฟ	f	900
+ฟ	fofan	900
+ฟ	foo1 fan1	900
+ภ	ph	780
+ภ	phosamphao	780
+ภ	phoo1 sam5 phao1	780
+ม	m	990
+ม	moma	990
+ม	moo1 maa4	990
+ย	y	980
+ย	yoyak	980
+ย	yoo1 yak4	980
+ร	r	990
+ร	roruea	990
+ร	roo1 ruea1	990
+ล	l	990
+ล	loling	990
+ล	loo1 ling1	990
+ว	w	990
+ว	wowaen	990
+ว	woo1 waen5	990
+ศ	s	750
+ศ	sosala	750
+ศ	soo5 saa5 laa1	750
+ษ	s	700
+ษ	soruesi	700
+ษ	soo5 rueu1 sii5	700
+ส	s	990
+ส	sosuea	990
+ส	soo5 suea5	990
+ห	h	990
+ห	hohip	990
+ห	hoo5 hiip2	990
+ฬ	l	350
+ฬ	lochula	350
+ฬ	loo1 chu2 laa1	350
+อ	o	990
+อ	oang	990
+อ	oo1 aang2	990
+ฮ	h	700
+ฮ	honokhuk	700
+ฮ	hoo1 nok4 huuk3	700
+ะ	a	900
+ะ	saraa	950
+า	aa	990
+า	saraaa	990
+ั	maihanakat	900
+ั	hanakat	900
+ำ	am	950
+ำ	saraam	950
+ิ	i	900
+ิ	sarai	950
+ี	ii	950
+ี	saraii	950
+ึ	ue	880
+ึ	saraue	900
+ื	uee	900
+ื	sarauee	900
+ุ	u	900
+ุ	sarau	950
+ู	uu	950
+ู	sarauu	950
+เ	e	950
+เ	ee	980
+เ	sarae	950
+แ	ae	950
+แ	saraae	950
+โ	o	900
+โ	oo	950
+โ	sarao	950
+ใ	ai	920
+ใ	maimuan	950
+ไ	ai	960
+ไ	maimalai	950
+ฤ	rue	850
+ฤๅ	ruee	700
+ฦ	lue	500
+ฦๅ	luee	400
+่	maiek	990
+่	ek	900
+่	tone2	900
+้	maitho	990
+้	tho	900
+้	tone3	900
+๊	maitri	990
+๊	tri	900
+๊	tone4	900
+๋	maichattawa	990
+๋	chattawa	900
+๋	tone5	900
+็	maitaikhu	950
+็	taikhu	900
+์	karan	990
+์	thanthakhat	950
+ๆ	maiyamok	990
+ๆ	yamok	950
+ฯ	paiyannoi	950
+ฯลฯ	la	980
+ฯลฯ	paiyanyai	950
+฿	baht	990
+๐	sun	850
+๑	nueng	850
+๒	song	850
+๓	sam	850
+๔	si	850
+๕	ha	850
+๖	hok	850
+๗	chet	850
+๘	paet	850
+๙	kao	850
