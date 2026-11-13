@@ -1,0 +1,17 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# thai_roman_fuzzy - 泰語拼音（模糊音版）主詞庫索引
+#
+# 與 thai_roman 相同，但額外載入 thai_roman.fuzzy 模糊容錯編碼表。
+
+---
+name: thai_roman_fuzzy
+version: "2026.11.13"
+sort: by_weight
+use_preset_vocabulary: false
+import_tables:
+  - thai_roman.chars
+  - thai_roman.words
+  - thai_roman.fuzzy
+...

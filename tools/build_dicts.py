@@ -383,15 +383,51 @@ use_preset_vocabulary: false
 ...
 """
     sorted_entries = sorted(entries.items(), key=lambda x: (-x[1], x[0][0]))
+
+    def abbrev_codes(rom):
+        """返回 (首字母簡拼, 聲母簡拼)，以空格分隔音節（如 's w d'、'kh kh'）。"""
+        initials, onsets = [], []
+        for syl in rom.split():
+            body = re.sub(r"[1-5]$", "", syl)
+            if not body:
+                continue
+            initials.append(body[0])
+            onset = body[0]
+            for d in ("kh", "ph", "th", "ch", "ng"):
+                if body.startswith(d):
+                    onset = d
+                    break
+            onsets.append(onset)
+        return " ".join(initials), " ".join(onsets)
+
     lines = [header.strip()]
+    # 1. 全拼條目
     for (word, rom), weight in sorted_entries:
         lines.append(f"{word}\t{rom}\t{weight}")
+
+    # 2. 多音節詞的首字母/聲母簡拼條目（權重約為全拼的 1/3，減少重碼干擾）
+    abbrev_seen = set()
+    abbrev_count = 0
+    for (word, rom), weight in sorted_entries:
+        if rom.count(" ") < 1:
+            continue
+        ini, onset = abbrev_codes(rom)
+        w = max(1, int(weight * 0.35))
+        for code in dict.fromkeys((ini, onset)):
+            if not code or " " not in code:
+                continue
+            key = (word, code)
+            if key in abbrev_seen:
+                continue
+            abbrev_seen.add(key)
+            lines.append(f"{word}\t{code}\t{w}")
+            abbrev_count += 1
 
     out_path = ROOT_DIR / "thai_roman.words.dict.yaml"
     out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     size_kb = out_path.stat().st_size / 1024
     print(
-        f"[OK] Wrote {out_path} ({len(sorted_entries)} words, {size_kb:.1f} KB)"
+        f"[OK] Wrote {out_path} ({len(sorted_entries)} words + {abbrev_count} abbrev, {size_kb:.1f} KB)"
     )
 
 
@@ -524,7 +560,104 @@ use_preset_vocabulary: false
     print(f"[OK] Wrote {out_path} ({len(kedmanee_map)} keys)")
 
 
+def _parse_words_dict(path: Path):
+    """解析 words 詞典，返回 [(word, rom, weight), ...]（僅全拼主條目）。"""
+    entries = []
+    in_body = False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip() == "...":
+            in_body = True
+            continue
+        if not in_body:
+            continue
+        parts = line.split("\t")
+        if len(parts) != 3:
+            continue
+        word, rom, weight = parts
+        entries.append((word, rom, int(weight)))
+    return entries
+
+
+def fuzzy_variants(rom: str):
+    """生成 rom 的所有模糊變體（含原編碼）。
+
+    模糊方向（針對中文母語者、減少重碼、避免鏈式）：
+      - kh -> k（送氣漏 h，單向）
+      - ph -> p（送氣漏 h，單向）
+      - th -> t（送氣漏 h，單向）
+      - b <-> p（清濁，雙向）
+      - d <-> t（清濁，雙向）
+    不做 b <-> ph（跨度大，絕大多數人能區分）。
+    注意：th 必須在 t 之前判斷，否則送氣的 th 會被誤當成清濁的 t。
+    """
+    per_syl = []
+    for syl in rom.split():
+        body = re.sub(r"[1-5]$", "", syl)
+        tone = syl[len(body):]
+        variants = [syl]
+        if body.startswith("kh"):
+            variants.append("k" + body[2:] + tone)
+        elif body.startswith("ph"):
+            variants.append("p" + body[2:] + tone)
+        elif body.startswith("th"):
+            variants.append("t" + body[2:] + tone)
+        elif body.startswith("b"):
+            variants.append("p" + body[1:] + tone)
+        elif body.startswith("p"):
+            variants.append("b" + body[1:] + tone)
+        elif body.startswith("d"):
+            variants.append("t" + body[1:] + tone)
+        elif body.startswith("t"):
+            variants.append("d" + body[1:] + tone)
+        per_syl.append(variants)
+    from itertools import product
+    return [" ".join(combo) for combo in product(*per_syl)]
+
+
+def build_fuzzy_dict() -> None:
+    """生成 thai_roman.fuzzy.dict.yaml（單向模糊容錯編碼）。"""
+    words_path = ROOT_DIR / "thai_roman.words.dict.yaml"
+    entries = _parse_words_dict(words_path)
+
+    header = """# Rime dictionary
+# encoding: utf-8
+#
+# thai_roman.fuzzy - 泰語模糊音容錯編碼（單向，減少重碼）
+#
+# 針對中文母語者常見聽辨錯誤：
+#   - kh -> k（送氣漏 h） / ph -> p（送氣漏 h） / th -> t（送氣漏 h）
+#   - b <-> p（清濁不分） / d <-> t（清濁不分）
+# 不做 b <-> ph。
+# 關閉模糊音：使用 thai_roman（精確版）方案即可；本表僅供 thai_roman_fuzzy 導入。
+
+---
+name: thai_roman.fuzzy
+version: "2026.11.13"
+sort: by_weight
+use_preset_vocabulary: false
+...
+"""
+    rows = []
+    seen = set()
+    for word, rom, weight in entries:
+        for variant in fuzzy_variants(rom):
+            if variant == rom:
+                continue
+            w = max(1, int(weight * 0.25))
+            key = (word, variant)
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append(f"{word}\t{variant}\t{w}")
+
+    out_path = ROOT_DIR / "thai_roman.fuzzy.dict.yaml"
+    out_path.write_text(header + "\n".join(rows) + "\n", encoding="utf-8")
+    size_kb = out_path.stat().st_size / 1024
+    print(f"[OK] Wrote {out_path} ({len(rows)} fuzzy variants, {size_kb:.1f} KB)")
+
+
 if __name__ == "__main__":
     build_chars_dict()
     build_words_dict()
+    build_fuzzy_dict()
     build_kedmanee_dict()

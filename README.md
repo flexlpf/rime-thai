@@ -17,11 +17,12 @@
 
 **`rime-thai`** 是一套适用于 **[Rime 输入法引擎](https://rime.im/)**（Windows **小狼毫 Weasel** / macOS **鼠须管 Squirrel** / Linux **中州韵 ibus-rime & fcitx5-rime** / Android **同文 Trime**）的开源**泰语输入法（Rime 泰语输入方案）**。支持直接用**英文字母 / 拉丁字母拼写打泰语**（泰语拼音 / 罗马音转写输入法）以及**泰国标准物理键盘盲打**。架构设计参考 Rime 官方 [rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese) 与 [rime-ipa](https://github.com/rime/rime-ipa)。
 
-安装后可在 Rime 输入法菜单中自由勾选启用以下**两套独立泰语输入方案**：
+安装后可在 Rime 输入法菜单中自由勾选启用以下**三套独立泰语输入方案**：
 
 | 方案 ID | 显示名称 | 适用场景 | 核心特性 |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音**<br>*(泰语拉丁字母/英文字母输入法)* | 使用**英文字母 / 拉丁字母拼音**（RTGS / Paiboon 罗马音）输入泰语 | 内置 **23,800+ 条**高频词汇；默认支持**忽略声调盲打**、长短元音容错、首字母简拼、44 辅音及元音部件拆字输入、候选词发音提示开关 (`spelling_hints`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音**<br>*(泰语拼音模糊音容错版)* | 中文母语者等难以区分泰语**送气 / 清浊**对立的用户 | 在 `thai_roman` 基础上增加模糊音容错：送气漏 h（`kh→k`、`ph→p`、`th→t`）与清浊不分（`b↔p`、`d↔t`），其余能力完全一致 |
 | **`thai_kedmanee`** | **泰語鍵盤**<br>*(泰语标准键盘 Kedmanee)* | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
 
 ### 一、安装方法
@@ -35,7 +36,7 @@
    ```text
    flexlpf/rime-thai
    ```
-4. 自动下载完成后，在弹出的方案勾选窗口中勾选 **“泰語拼音”** 与 **“泰語鍵盤”**，点击确定完成重新部署即可使用。
+4. 自动下载完成后，在弹出的方案勾选窗口中勾选 **“泰語拼音”**、**“泰語拼音·模糊音”** 与 **“泰語鍵盤”**，点击确定完成重新部署即可使用。
 
 #### 方法 2：通过东风破（`plum` / `rime-install`）命令行安装
 ```bash
@@ -47,8 +48,9 @@ bash rime-install flexlpf/rime-thai
 ```yaml
 patch:
   schema_list:
-    - {schema: thai_roman}      # 泰语拼音（拉丁转写）
-    - {schema: thai_kedmanee}   # 泰语标准键盘（Kedmanee）
+    - {schema: thai_roman}        # 泰语拼音（拉丁转写，精确版）
+    - {schema: thai_roman_fuzzy}  # 泰语拼音·模糊音（含送气/清浊容错）
+    - {schema: thai_kedmanee}     # 泰语标准键盘（Kedmanee）
 ```
 保存后执行 **“重新部署 (Deploy)”**。
 
@@ -105,7 +107,20 @@ patch:
     translator/spelling_hints: 0
   ```
 
-#### （二）方案二：`thai_kedmanee`（泰语标准键盘）
+#### （二）方案二：`thai_roman_fuzzy`（泰语拼音·模糊音）
+泰语存在**送气 / 不送气**（如 `k`-`kh`、`p`-`ph`、`t`-`th`）与**清音 / 浊音**（`b`-`p`、`d`-`t`）的声母对立，中文母语者常难以听辨。模糊音版在 `thai_roman` 词库基础上，额外派生容错编码（权重约为主条目的 0.25，尽量减少重码干扰）：
+
+| 模糊方向 | 说明 | 输入示例 | 命中 |
+| :--- | :--- | :--- | :--- |
+| `kh → k` | 送气漏 h | `kopkun` | **ขอบคุณ** |
+| `ph → p` | 送气漏 h | `pom` | **ผม** |
+| `th → t` | 送气漏 h | `tam` / `tii` | **ทำ** / **ที่** |
+| `b ↔ p` | 清浊不分 | `paan` | **บ้าน** |
+| `d ↔ t` | 清浊不分 | `tii` / `dong` | **ดี** / **ต้อง** |
+
+> 说明：模糊音仅单向作用于「送气漏 h」（`kh→k`、`ph→p`、`th→t`），反向（`k→kh`、`p→ph`、`t→th`）不启用，以降低重码率；清浊（`b↔p`、`d↔t`）为双向。刻意**不**做 `b↔ph` 这类跨度大的组合（绝大多数使用者可区分）。若无需模糊音，直接使用 `thai_roman` 精确版即可，两个方案可同时勾选、按需切换。
+
+#### （三）方案三：`thai_kedmanee`（泰语标准键盘）
 切换至“泰语键盘”后，按键映射完全遵循泰国工业标准 **TIS 820-2538 (Kedmanee)**，按键直接上屏。
 
 
@@ -131,11 +146,12 @@ patch:
 
 An open-source **Thai input method** package for the **Rime Input Method Engine** (Weasel on Windows, Squirrel on macOS, ibus-rime / fcitx5-rime on Linux, Trime on Android). Architecturally inspired by `rime-cantonese` (Jyutping) and `rime-ipa`.
 
-Once installed, two independent Thai input schemas are available:
+Once installed, three independent Thai input schemas are available:
 
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`) and voicing confusion (`b↔p`, `d↔t`) |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ### 1. Installation
@@ -147,7 +163,7 @@ Once installed, two independent Thai input schemas are available:
    ```text
    flexlpf/rime-thai
    ```
-4. Check **"泰語拼音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy.
+4. Check **"泰語拼音"**, **"泰語拼音·模糊音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy.
 
 #### Option B: Via `plum` (`rime-install`) CLI
 ```bash
@@ -159,8 +175,9 @@ Copy all `*.yaml` files into your Rime **User Data Directory** (`%APPDATA%\Rime`
 ```yaml
 patch:
   schema_list:
-    - {schema: thai_roman}
-    - {schema: thai_kedmanee}
+    - {schema: thai_roman}        # Thai Romanization (precise)
+    - {schema: thai_roman_fuzzy}  # Thai Romanization + fuzzy (aspiration/voicing tolerance)
+    - {schema: thai_kedmanee}     # Thai Kedmanee Keyboard
 ```
 Then run **Deploy (重新部署)**.
 
@@ -194,6 +211,9 @@ To narrow down homophones, append a tone digit `1`–`5` (or letter shortcut `v 
 #### Pronunciation Hints Toggle (`spelling_hints`)
 By default, romanized pronunciation hints are shown next to candidates (`spelling_hints: 8`). To disable them, set `translator/spelling_hints: 0` in `thai_roman.custom.yaml`.
 
+#### Fuzzy Schema (`thai_roman_fuzzy`)
+Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`) and **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance codes (weight ≈ 0.25 of the base entry, to limit duplicate candidates): dropped-aspiration `kh→k`, `ph→p`, `th→t` (unidirectional) and voicing confusion `b↔p`, `d↔t` (bidirectional). `b↔ph` is deliberately **not** provided. If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
+
 ---
 
 <a id="ภาษาไทย"></a>
@@ -202,11 +222,12 @@ By default, romanized pronunciation hints are shown next to candidates (`spellin
 
 **`rime-thai`** คือชุดแป้นพิมพ์ภาษาไทยแบบโอเพนซอร์สสำหรับ **Rime Input Method Engine** (รองรับทั้ง Weasel บน Windows, Squirrel บน macOS, ibus-rime / fcitx5-rime บน Linux และ Trime บน Android) ออกแบบโครงสร้างตามมาตรฐานของ `rime-cantonese` และ `rime-ipa`
 
-ประกอบด้วยผังการพิมพ์ **2 รูปแบบ** ที่เลือกเปิดใช้งานได้พร้อมกัน:
+ประกอบด้วยผังการพิมพ์ **3 รูปแบบ** ที่เลือกเปิดใช้งานได้พร้อมกัน:
 
 | รหัสผัง (Schema ID) | ชื่อที่แสดง | ลักษณะการใช้งาน | จุดเด่น |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (พินอินภาษาไทย / คาราโอเกะ) | พิมพ์ภาษาไทยด้วยอักษรโรมันตามเสียงอ่าน (RTGS / Paiboon) | คลังคำศัพท์ความถี่สูงกว่า **23,800+ คำ**; พิมพ์ได้ทันที**โดยไม่ต้องใส่วรรณยุกต์**, รองรับการย่อเสียงสระสั้น-ยาว, พิมพ์ตัวย่อพยัญชนะต้น, พิมพ์พยัญชนะไทยครบทั้ง 44 ตัว และมีสวิตช์เปิด/ปิดคำใบ้การออกเสียง (`spelling_hints`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (พินอินภาษาไทยแบบผ่อนปรน) | สำหรับผู้ที่แยกเสียง**ธนิต / สิถิล** หรือ**โฆษะ / อโฆษะ**ไม่ออก (เช่น ผู้พูดภาษาจีน) | เหมือน `thai_roman` ทุกประการ แต่เพิ่มการผ่อนปรนเสียงพยัญชนะ: ตกหล่นเสียงธนิต (`kh→k`, `ph→p`, `th→t`) และสับสนเสียงโฆษะ-อโฆษะ (`b↔p`, `d↔t`) |
 | **`thai_kedmanee`** | **泰語鍵盤** (แป้นพิมพ์เกษมณี) | พิมพ์สัมผัสตามผังแป้นพิมพ์ภาษาไทยมาตรฐาน | ตรงตามมาตรฐานผลิตภัณฑ์อุตสาหกรรม **มอก. 820-2538 (Kedmanee)** ทุกปุ่ม สลับภาษาภายใน Rime ได้ทันทีโดยไม่ต้องเปลี่ยนภาษาของระบบปฏิบัติการ |
 
 ### 1. วิธีการติดตั้ง (Installation)
@@ -218,7 +239,7 @@ By default, romanized pronunciation hints are shown next to candidates (`spellin
    ```text
    flexlpf/rime-thai
    ```
-4. เมื่อดาวน์โหลดเสร็จสิ้น ให้ติ๊กเลือก **"泰語拼音"** และ/หรือ **"泰語鍵盤"** แล้วกดยืนยันเพื่อประมวลผล (Deploy)
+4. เมื่อดาวน์โหลดเสร็จสิ้น ให้ติ๊กเลือก **"泰語拼音"**, **"泰語拼音·模糊音"** และ/หรือ **"泰語鍵盤"** แล้วกดยืนยันเพื่อประมวลผล (Deploy)
 
 #### วิธีที่ 2: ติดตั้งผ่านบรรทัดคำสั่ง `plum` (`rime-install`)
 ```bash
@@ -230,8 +251,9 @@ bash rime-install flexlpf/rime-thai
 ```yaml
 patch:
   schema_list:
-    - {schema: thai_roman}
-    - {schema: thai_kedmanee}
+    - {schema: thai_roman}        # พิมพ์ภาษาไทยด้วยอักษรโรมัน (แม่นยำ)
+    - {schema: thai_roman_fuzzy}  # พินอินภาษาไทยแบบผ่อนปรน (ธนิต/โฆษะ)
+    - {schema: thai_kedmanee}     # แป้นพิมพ์เกษมณีมาตรฐาน
 ```
 บันทึกไฟล์แล้วสั่ง **Deploy (重新部署)**
 
@@ -256,6 +278,7 @@ patch:
   - พิมพ์ตัวเลขไทย (`๐`–`๙`) ด้วยคำอ่าน: `sun` (`๐`), `nueng` (`๑`), `song` (`๒`), `sam` (`๓`), `si` (`๔`), `ha` (`๕`), `hok` (`๖`), `chet` (`๗`), `paet` (`๘`), `kao` (`๙`)
 - **การเปิด/ปิดคำใบ้การออกเสียง (`spelling_hints`)**:
   - หากต้องการซ่อนคำใบ้เสียงอ่านภาษาอังกฤษท้ายคำตัวเลือก ให้แก้ไขค่า `spelling_hints: 0` ในไฟล์ `thai_roman.schema.yaml` หรือกำหนดใน `thai_roman.custom.yaml`
+- **ผังผ่อนปรน (`thai_roman_fuzzy`)**: ภาษาไทยมีความแตกต่างระหว่างเสียง**ธนิต / สิถิล** (`k`–`kh`, `p`–`ph`, `t`–`th`) และ**โฆษะ / อโฆษะ** (`b`–`p`, `d`–`t`) ซึ่งผู้พูดภาษาจีนมักฟังไม่ออก ผังนี้เพิ่มรหัสผ่อนปรน (น้ำหนัก ≈ 0.25 เพื่อลดคำซ้ำ) ได้แก่ ตกหล่นเสียงธนิต `kh→k`, `ph→p`, `th→t` (ทางเดียว) และสับสนเสียงโฆษะ-อโฆษะ `b↔p`, `d↔t` (สองทาง) โดยจงใจ**ไม่**ทำ `b↔ph` หากไม่ต้องการใช้ ให้เลือก `thai_roman` ตามปกติ ทั้งสองผังเปิดพร้อมกันและสลับใช้ได้ทันที
 
 ### 3. แหล่งอ้างอิงและกิตติกรรมประกาศ (References & Acknowledgements)
 - **หลักเกณฑ์การถอดอักษรไทยเป็นอักษรโรมันแบบถ่ายเสียง (RTGS)** โดยสำนักงานราชบัณฑิตยสภา
@@ -277,6 +300,6 @@ Released under the **[MIT License](./LICENSE)**. Upstream linguistic datasets ar
 - **Q: 如何用英文字母 / 拉丁字母在电脑上打泰语？（泰语拉丁字母输入法 / 泰语英文字母输入法）**
   - A: 安装本仓库的 `thai_roman`（泰语拼音）方案后，无需背诵复杂的泰文物理键盘分布，直接用键盘上的 26 个英文字母输入泰语发音（如打 `sawatdi` 出 `สวัสดี`，打 `khopkhun` 出 `ขอบคุณ`），支持忽略声调盲打与首字母简拼。
 - **Q: 小狼毫（Weasel）/ 鼠须管（Squirrel）/ Rime 怎么添加泰语输入法？**
-  - A: 在小狼毫「输入法设定」→「获取更多输入方案…」中输入 `flexlpf/rime-thai`，即可一键添加「泰語拼音」与「泰語鍵盤（Kedmanee）」两套方案。
+  - A: 在小狼毫「输入法设定」→「获取更多输入方案…」中输入 `flexlpf/rime-thai`，即可一键添加「泰語拼音」「泰語拼音·模糊音」与「泰語鍵盤（Kedmanee）」三套方案。
 
-> **Keywords / 关键词**：Rime 泰语输入法、Rime 泰语输入方案、小狼毫泰语、鼠须管泰语、中州韵泰语、同文泰语、泰语拉丁字母输入法、泰语英文字母输入法、用英文字母打泰语、泰语拼音输入法、泰语罗马音输入法、泰文音标输入法、泰语标准键盘、Thai Input Method for Rime, Thai Phonetic Input Method, Thai Romanization IME, RTGS, Paiboon, Thai Kedmanee Keyboard, พิมพ์ภาษาไทยด้วยอักษรโรมัน, แป้นพิมพ์ภาษาไทย Rime, พินอินภาษาไทย.
+> **Keywords / 关键词**：Rime 泰语输入法、Rime 泰语输入方案、小狼毫泰语、鼠须管泰语、中州韵泰语、同文泰语、泰语拉丁字母输入法、泰语英文字母输入法、用英文字母打泰语、泰语拼音输入法、泰语罗马音输入法、泰文音标输入法、泰语模糊音、泰语标准键盘、Thai Input Method for Rime, Thai Phonetic Input Method, Thai Romanization IME, RTGS, Paiboon, Thai Kedmanee Keyboard, พิมพ์ภาษาไทยด้วยอักษรโรมัน, แป้นพิมพ์ภาษาไทย Rime, พินอินภาษาไทย.

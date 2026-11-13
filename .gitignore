@@ -11,3 +11,7 @@ sync/
 __pycache__/
 *.py[cod]
 .venv/
+
+# Local diagnostic test scripts (machine-specific rime.dll paths, not shipped)
+tools/diag*.py
+tools/diag_jyut.py

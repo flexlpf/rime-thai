@@ -8,11 +8,12 @@
 
 An open-source **Thai input method (IME)** package for the **[Rime Input Method Engine](https://rime.im/)** (Weasel on Windows, Squirrel on macOS, ibus-rime / fcitx5-rime on Linux, Trime on Android). Supports both **typing Thai with Latin / English letters (Thai phonetic / romanization input)** and the standard **Thai Kedmanee keyboard layout**. Architecturally inspired by [rime-cantonese](https://github.com/CanCLID/rime-cantonese) (Jyutping) and [rime-ipa](https://github.com/rime/rime-ipa).
 
-Once installed, two independent Thai input schemas can be enabled in Rime:
+Once installed, three independent Thai input schemas can be enabled in Rime:
 
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`) and voicing confusion (`b↔p`, `d↔t`) |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ---
@@ -26,7 +27,7 @@ Once installed, two independent Thai input schemas can be enabled in Rime:
    ```text
    flexlpf/rime-thai
    ```
-4. Check **"泰語拼音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy.
+4. Check **"泰語拼音"**, **"泰語拼音·模糊音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy.
 
 ### Method 2: Via `plum` (`rime-install`) CLI
 ```bash
@@ -38,8 +39,9 @@ Copy all `*.yaml` files into your Rime **User Data Directory** (`%APPDATA%\Rime`
 ```yaml
 patch:
   schema_list:
-    - {schema: thai_roman}      # Thai Romanization
-    - {schema: thai_kedmanee}   # Thai Kedmanee Keyboard
+    - {schema: thai_roman}        # Thai Romanization (precise)
+    - {schema: thai_roman_fuzzy}  # Thai Romanization + fuzzy (aspiration/voicing tolerance)
+    - {schema: thai_kedmanee}     # Thai Kedmanee Keyboard
 ```
 Then run **Deploy (重新部署)**.
 
@@ -95,7 +97,23 @@ By default, romanized pronunciation hints are shown next to candidates (e.g., `�
 
 ---
 
-### Schema 2: `thai_kedmanee` (Thai Kedmanee Keyboard)
+### Schema 2: `thai_roman_fuzzy` (Thai Romanization + Fuzzy)
+
+Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`) and **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance codes on top of the `thai_roman` lexicon (weight ≈ 0.25 of the base entry, to limit duplicate candidates):
+
+| Fuzzy Direction | Meaning | Type | Example | Matches |
+| :--- | :--- | :--- | :--- | :--- |
+| `kh → k` | dropped aspiration | unidirectional | `kopkun` | **ขอบคุณ** |
+| `ph → p` | dropped aspiration | unidirectional | `pom` | **ผม** |
+| `th → t` | dropped aspiration | unidirectional | `tam` / `tii` | **ทำ** / **ที่** |
+| `b ↔ p` | voicing confusion | bidirectional | `paan` | **บ้าน** |
+| `d ↔ t` | voicing confusion | bidirectional | `tii` / `dong` | **ดี** / **ต้อง** |
+
+> Direction note: dropped-aspiration rules are **unidirectional** — typing the unaspirated form (`k` / `p` / `t`) surfaces aspirated candidates (`kh` / `ph` / `th`), but typing `kh` / `ph` / `th` does **not** surface unaspirated candidates. This keeps the candidate list clean. The `b↔p` and `d↔t` voicing rules are bidirectional. `b↔ph` is deliberately **not** provided (most users can distinguish it). If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
+
+---
+
+### Schema 3: `thai_kedmanee` (Thai Kedmanee Keyboard)
 
 Follows the Thai Industrial Standard **TIS 820-2538 (Kedmanee)** layout with direct single-key commit:
 
