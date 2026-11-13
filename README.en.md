@@ -13,7 +13,7 @@ Once installed, three independent Thai input schemas can be enabled in Rime:
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`) and voicing confusion (`b↔p`, `d↔t`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing / final-consonant** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ---
@@ -99,7 +99,7 @@ By default, romanized pronunciation hints are shown next to candidates (e.g., `�
 
 ### Schema 2: `thai_roman_fuzzy` (Thai Romanization + Fuzzy)
 
-Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`) and **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance codes on top of the `thai_roman` lexicon (weight ≈ 0.25 of the base entry, to limit duplicate candidates):
+Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`), **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), and **final consonants** (`p`/`t`/`k`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance spellings via `speller/algebra` on top of the `thai_roman` lexicon (which keeps accurate codes, so candidate hints are **always accurate**):
 
 | Fuzzy Direction | Meaning | Type | Example | Matches |
 | :--- | :--- | :--- | :--- | :--- |
@@ -108,8 +108,9 @@ Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`,
 | `th → t` | dropped aspiration | unidirectional | `tam` / `tii` | **ทำ** / **ที่** |
 | `b ↔ p` | voicing confusion | bidirectional | `paan` | **บ้าน** |
 | `d ↔ t` | voicing confusion | bidirectional | `tii` / `dong` | **ดี** / **ต้อง** |
+| final `p/t/k → b/d/g` | final-consonant tolerance | unidirectional | `krab` | **ครับ** |
 
-> Direction note: dropped-aspiration rules are **unidirectional** — typing the unaspirated form (`k` / `p` / `t`) surfaces aspirated candidates (`kh` / `ph` / `th`), but typing `kh` / `ph` / `th` does **not** surface unaspirated candidates. This keeps the candidate list clean. The `b↔p` and `d↔t` voicing rules are bidirectional. `b↔ph` is deliberately **not** provided (most users can distinguish it). If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
+> Direction note: dropped-aspiration rules are **unidirectional** — typing the unaspirated form (`k` / `p` / `t`) surfaces aspirated candidates (`kh` / `ph` / `th`), but typing `kh` / `ph` / `th` does **not** surface unaspirated candidates. The `b↔p` and `d↔t` voicing rules are bidirectional. Final-consonant rules are unidirectional: typing `b` / `d` / `g` at the end surfaces accurate `p` / `t` / `k` finals (e.g. `krab` → **ครับ**). `b↔ph` is deliberately **not** provided (most users can distinguish it). Candidate hints always show the **accurate** romanization, not the fuzzy spelling. If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
 
 ---
 

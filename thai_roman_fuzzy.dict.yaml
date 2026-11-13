@@ -3,7 +3,8 @@
 #
 # thai_roman_fuzzy - 泰語拼音（模糊音版）主詞庫索引
 #
-# 與 thai_roman 相同，但額外載入 thai_roman.fuzzy 模糊容錯編碼表。
+# 與 thai_roman 詞庫完全相同；模糊音由 thai_roman_fuzzy.schema.yaml 的
+# speller/algebra derive 規則實現（詞庫保留準確編碼，候選注音始終準確）。
 
 ---
 name: thai_roman_fuzzy
@@ -13,5 +14,4 @@ use_preset_vocabulary: false
 import_tables:
   - thai_roman.chars
   - thai_roman.words
-  - thai_roman.fuzzy
 ...

@@ -22,7 +22,7 @@
 | 方案 ID | 显示名称 | 适用场景 | 核心特性 |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音**<br>*(泰语拉丁字母/英文字母输入法)* | 使用**英文字母 / 拉丁字母拼音**（RTGS / Paiboon 罗马音）输入泰语 | 内置 **23,800+ 条**高频词汇；默认支持**忽略声调盲打**、长短元音容错、首字母简拼、44 辅音及元音部件拆字输入、候选词发音提示开关 (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音**<br>*(泰语拼音模糊音容错版)* | 中文母语者等难以区分泰语**送气 / 清浊**对立的用户 | 在 `thai_roman` 基础上增加模糊音容错：送气漏 h（`kh→k`、`ph→p`、`th→t`）与清浊不分（`b↔p`、`d↔t`），其余能力完全一致 |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音**<br>*(泰语拼音模糊音容错版)* | 中文母语者等难以区分泰语**送气 / 清浊 / 尾辅音**对立的用户 | 在 `thai_roman` 基础上增加模糊音容错：送气漏 h（`kh→k`、`ph→p`、`th→t`）、清浊不分（`b↔p`、`d↔t`）与尾辅音（`p/t/k→b/d/g`），注音始终准确 |
 | **`thai_kedmanee`** | **泰語鍵盤**<br>*(泰语标准键盘 Kedmanee)* | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
 
 ### 一、安装方法
@@ -108,7 +108,7 @@ patch:
   ```
 
 #### （二）方案二：`thai_roman_fuzzy`（泰语拼音·模糊音）
-泰语存在**送气 / 不送气**（如 `k`-`kh`、`p`-`ph`、`t`-`th`）与**清音 / 浊音**（`b`-`p`、`d`-`t`）的声母对立，中文母语者常难以听辨。模糊音版在 `thai_roman` 词库基础上，额外派生容错编码（权重约为主条目的 0.25，尽量减少重码干扰）：
+泰语存在**送气 / 不送气**（如 `k`-`kh`、`p`-`ph`、`t`-`th`）与**清音 / 浊音**（`b`-`p`、`d`-`t`）的声母对立，以及**尾辅音**（`p`/`t`/`k`）的听辨难点，中文母语者常难以区分。模糊音版通过 `speller/algebra` 规则在 `thai_roman` 词库之上派生容错拼写（词库仍保留准确编码，故候选注音**始终准确**）：
 
 | 模糊方向 | 说明 | 输入示例 | 命中 |
 | :--- | :--- | :--- | :--- |
@@ -117,8 +117,9 @@ patch:
 | `th → t` | 送气漏 h | `tam` / `tii` | **ทำ** / **ที่** |
 | `b ↔ p` | 清浊不分 | `paan` | **บ้าน** |
 | `d ↔ t` | 清浊不分 | `tii` / `dong` | **ดี** / **ต้อง** |
+| 尾 `p/t/k → b/d/g` | 尾辅音容错 | `krab` | **ครับ** |
 
-> 说明：模糊音仅单向作用于「送气漏 h」（`kh→k`、`ph→p`、`th→t`），反向（`k→kh`、`p→ph`、`t→th`）不启用，以降低重码率；清浊（`b↔p`、`d↔t`）为双向。刻意**不**做 `b↔ph` 这类跨度大的组合（绝大多数使用者可区分）。若无需模糊音，直接使用 `thai_roman` 精确版即可，两个方案可同时勾选、按需切换。
+> 说明：模糊音仅单向作用于「送气漏 h」（`kh→k`、`ph→p`、`th→t`），反向（`k→kh`、`p→ph`、`t→th`）不启用，以降低重码率；清浊（`b↔p`、`d↔t`）为双向；尾辅音（`p→b`、`t→d`、`k→g`）为单向容错（输入 `b/d/g` 命中准确拼写的 `p/t/k`）。刻意**不**做 `b↔ph` 这类跨度大的组合（绝大多数使用者可区分）。所有模糊匹配的候选注音均为**准确罗马音**（如输入 `krab` 得到 **ครับ**，注音显示 `khrap4` 而非 `krab`）。若无需模糊音，直接使用 `thai_roman` 精确版即可，两个方案可同时勾选、按需切换。
 
 #### （三）方案三：`thai_kedmanee`（泰语标准键盘）
 切换至“泰语键盘”后，按键映射完全遵循泰国工业标准 **TIS 820-2538 (Kedmanee)**，按键直接上屏。
@@ -151,7 +152,7 @@ Once installed, three independent Thai input schemas are available:
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`) and voicing confusion (`b↔p`, `d↔t`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing / final-consonant** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ### 1. Installation
@@ -212,7 +213,7 @@ To narrow down homophones, append a tone digit `1`–`5` (or letter shortcut `v 
 By default, romanized pronunciation hints are shown next to candidates (`spelling_hints: 8`). To disable them, set `translator/spelling_hints: 0` in `thai_roman.custom.yaml`.
 
 #### Fuzzy Schema (`thai_roman_fuzzy`)
-Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`) and **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance codes (weight ≈ 0.25 of the base entry, to limit duplicate candidates): dropped-aspiration `kh→k`, `ph→p`, `th→t` (unidirectional) and voicing confusion `b↔p`, `d↔t` (bidirectional). `b↔ph` is deliberately **not** provided. If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
+Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`), **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), and **final consonants** (`p`/`t`/`k`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance spellings via `speller/algebra` on top of the `thai_roman` lexicon (which keeps accurate codes, so candidate hints are **always accurate**): dropped-aspiration `kh→k`, `ph→p`, `th→t` (unidirectional), voicing confusion `b↔p`, `d↔t` (bidirectional), and final-consonant `p→b`, `t→d`, `k→g` (typing `b`/`d`/`g` matches accurate `p`/`t`/`k`). `b↔ph` is deliberately **not** provided. If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
 
 ---
 
@@ -227,7 +228,7 @@ Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`,
 | รหัสผัง (Schema ID) | ชื่อที่แสดง | ลักษณะการใช้งาน | จุดเด่น |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (พินอินภาษาไทย / คาราโอเกะ) | พิมพ์ภาษาไทยด้วยอักษรโรมันตามเสียงอ่าน (RTGS / Paiboon) | คลังคำศัพท์ความถี่สูงกว่า **23,800+ คำ**; พิมพ์ได้ทันที**โดยไม่ต้องใส่วรรณยุกต์**, รองรับการย่อเสียงสระสั้น-ยาว, พิมพ์ตัวย่อพยัญชนะต้น, พิมพ์พยัญชนะไทยครบทั้ง 44 ตัว และมีสวิตช์เปิด/ปิดคำใบ้การออกเสียง (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (พินอินภาษาไทยแบบผ่อนปรน) | สำหรับผู้ที่แยกเสียง**ธนิต / สิถิล** หรือ**โฆษะ / อโฆษะ**ไม่ออก (เช่น ผู้พูดภาษาจีน) | เหมือน `thai_roman` ทุกประการ แต่เพิ่มการผ่อนปรนเสียงพยัญชนะ: ตกหล่นเสียงธนิต (`kh→k`, `ph→p`, `th→t`) และสับสนเสียงโฆษะ-อโฆษะ (`b↔p`, `d↔t`) |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (พินอินภาษาไทยแบบผ่อนปรน) | สำหรับผู้ที่แยกเสียง**ธนิต / สิถิล** หรือ**โฆษะ / อโฆษะ** หรือ**ตัวสะกด**ไม่ออก (เช่น ผู้พูดภาษาจีน) | เหมือน `thai_roman` ทุกประการ แต่เพิ่มการผ่อนปรนเสียงพยัญชนะ: ตกหล่นเสียงธนิต (`kh→k`, `ph→p`, `th→t`), สับสนเสียงโฆษะ-อโฆษะ (`b↔p`, `d↔t`) และตัวสะกด (`p/t/k→b/d/g`) พร้อมคำใบ้ที่แม่นยำเสมอ |
 | **`thai_kedmanee`** | **泰語鍵盤** (แป้นพิมพ์เกษมณี) | พิมพ์สัมผัสตามผังแป้นพิมพ์ภาษาไทยมาตรฐาน | ตรงตามมาตรฐานผลิตภัณฑ์อุตสาหกรรม **มอก. 820-2538 (Kedmanee)** ทุกปุ่ม สลับภาษาภายใน Rime ได้ทันทีโดยไม่ต้องเปลี่ยนภาษาของระบบปฏิบัติการ |
 
 ### 1. วิธีการติดตั้ง (Installation)
@@ -278,7 +279,7 @@ patch:
   - พิมพ์ตัวเลขไทย (`๐`–`๙`) ด้วยคำอ่าน: `sun` (`๐`), `nueng` (`๑`), `song` (`๒`), `sam` (`๓`), `si` (`๔`), `ha` (`๕`), `hok` (`๖`), `chet` (`๗`), `paet` (`๘`), `kao` (`๙`)
 - **การเปิด/ปิดคำใบ้การออกเสียง (`spelling_hints`)**:
   - หากต้องการซ่อนคำใบ้เสียงอ่านภาษาอังกฤษท้ายคำตัวเลือก ให้แก้ไขค่า `spelling_hints: 0` ในไฟล์ `thai_roman.schema.yaml` หรือกำหนดใน `thai_roman.custom.yaml`
-- **ผังผ่อนปรน (`thai_roman_fuzzy`)**: ภาษาไทยมีความแตกต่างระหว่างเสียง**ธนิต / สิถิล** (`k`–`kh`, `p`–`ph`, `t`–`th`) และ**โฆษะ / อโฆษะ** (`b`–`p`, `d`–`t`) ซึ่งผู้พูดภาษาจีนมักฟังไม่ออก ผังนี้เพิ่มรหัสผ่อนปรน (น้ำหนัก ≈ 0.25 เพื่อลดคำซ้ำ) ได้แก่ ตกหล่นเสียงธนิต `kh→k`, `ph→p`, `th→t` (ทางเดียว) และสับสนเสียงโฆษะ-อโฆษะ `b↔p`, `d↔t` (สองทาง) โดยจงใจ**ไม่**ทำ `b↔ph` หากไม่ต้องการใช้ ให้เลือก `thai_roman` ตามปกติ ทั้งสองผังเปิดพร้อมกันและสลับใช้ได้ทันที
+- **ผังผ่อนปรน (`thai_roman_fuzzy`)**: ภาษาไทยมีความแตกต่างระหว่างเสียง**ธนิต / สิถิล** (`k`–`kh`, `p`–`ph`, `t`–`th`), **โฆษะ / อโฆษะ** (`b`–`p`, `d`–`t`) และ**ตัวสะกด** (`p`/`t`/`k`) ซึ่งผู้พูดภาษาจีนมักฟังไม่ออก ผังนี้เพิ่มรหัสผ่อนปรนผ่าน `speller/algebra` (คลังคำเก็บรหัสแม่นยำ ทำให้คำใบ้การออกเสียง**แม่นยำเสมอ**) ได้แก่ ตกหล่นเสียงธนิต `kh→k`, `ph→p`, `th→t` (ทางเดียว), สับสนเสียงโฆษะ-อโฆษะ `b↔p`, `d↔t` (สองทาง) และตัวสะกด `p→b`, `t→d`, `k→g` (พิมพ์ `b`/`d`/`g` ได้คำสะกด `p`/`t`/`k`) โดยจงใจ**ไม่**ทำ `b↔ph` หากไม่ต้องการใช้ ให้เลือก `thai_roman` ตามปกติ ทั้งสองผังเปิดพร้อมกันและสลับใช้ได้ทันที
 
 ### 3. แหล่งอ้างอิงและกิตติกรรมประกาศ (References & Acknowledgements)
 - **หลักเกณฑ์การถอดอักษรไทยเป็นอักษรโรมันแบบถ่ายเสียง (RTGS)** โดยสำนักงานราชบัณฑิตยสภา

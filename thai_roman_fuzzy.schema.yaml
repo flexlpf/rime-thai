@@ -10,7 +10,7 @@ schema:
   description: |-
     泰語羅馬音（RTGS / Paiboon 兼容）輸入方案（含模糊音容錯版）
     在 thai_roman 基礎上，針對中文母語者常見聽辨錯誤提供模糊音：
-      kh→k、ph→p、th→t（送氣漏 h）；b↔p、d↔t（清濁不分）
+      kh→k、ph→p、th→t（送氣漏 h）；b↔p、d↔t（清濁不分）；尾輔音 b/d/g→p/t/k
     其餘能力與 thai_roman 相同：忽略聲調盲打、長短元音容錯、首字母簡拼、44 輔音及元音單字拆字輸入
     聲調數字：1=中平 (สามัญ) 2=低平 (เอก) 3=降調 (โท) 4=高平 (ตรี) 5=升調 (จัตวา)
 
@@ -95,6 +95,22 @@ speller:
     - derive/3$/q/
     - derive/4$/f/
     - derive/5$/r/
+
+    # 7. 模糊音容錯（僅模糊版）。排序至關重要：
+    #    清濁規則在前、送氣規則在後，避免 ph→p→b、th→t→d 鏈式污染（輸入 b 不應出現 พ/ผ/ภ）
+    - derive/^b/p/               # บ <-> ป（清濁不分，雙向）
+    - derive/^p(?!h)/b/
+    - derive/^d/t/               # ด <-> ต（清濁不分，雙向）
+    - derive/^t(?!h)/d/
+    - derive/^kh/k/              # ข/ค/ฆ -> ก（送氣漏 h，單向）
+    - derive/^ph/p/              # ผ/พ/ภ -> ป（送氣漏 h，單向）
+    - derive/^th/t/              # ท/ถ/ธ -> ต（送氣漏 h，單向）
+    # 尾輔音 b/d/g 對應模糊為 p/t/k。前面至少要一個字母（音節末輔音），
+    # 以免孤立的 p/t/k（如 ph 經送氣派生出的 p）被誤判為尾輔音而再轉 b/d/g，
+    # 造成 ph→p→b 鏈式污染（輸入 b 出現 พ/ผ/ภ）。
+    - derive/([a-z]+)p([1-5]?)$/$1b$2/
+    - derive/([a-z]+)t([1-5]?)$/$1d$2/
+    - derive/([a-z]+)k([1-5]?)$/$1g$2/
 
 translator:
   dictionary: thai_roman_fuzzy

@@ -12,6 +12,5 @@ install_files: >-
   thai_roman.words.dict.yaml
   thai_roman_fuzzy.schema.yaml
   thai_roman_fuzzy.dict.yaml
-  thai_roman.fuzzy.dict.yaml
   thai_kedmanee.schema.yaml
   thai_kedmanee.dict.yaml
