@@ -14,7 +14,7 @@
 
 ## 🇨🇳 简体中文说明
 
-一套适用于 **[Rime 输入法引擎](https://rime.im/)**（小狼毫 Weasel / 鼠须管 Squirrel / 中州韵 ibus-rime / fcitx5-rime / 同文 Trime）的开源泰语输入方案。架构设计参考 Rime 官方 `rime-ipa` 与粤拼方案 `rime-cantonese`。
+一套适用于 **[Rime 输入法引擎](https://rime.im/)**（小狼毫 Weasel / 鼠须管 Squirrel / 中州韵 ibus-rime / fcitx5-rime / 同文 Trime）的开源泰语输入方案。架构设计参考 Rime 官方**[rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese)** 与**[rime-ipa](https://github.com/rime/rime-ipa)**。
 
 安装后可在 Rime 输入法菜单中自由勾选启用以下**两套独立方案**：
 
@@ -105,9 +105,7 @@ patch:
 #### （二）方案二：`thai_kedmanee`（泰语标准键盘）
 切换至“泰语键盘”后，按键映射完全遵循泰国工业标准 **TIS 820-2538 (Kedmanee)**，按键直接上屏：
 
-```text
 <img width="1920" height="640" alt="image" src="https://github.com/user-attachments/assets/5fdd89bb-2c48-43f6-95b5-2d1c9a7b47e6" />
-```
 
 
 ### 三、引用来源与鸣谢
