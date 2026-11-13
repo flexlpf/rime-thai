@@ -103,9 +103,7 @@ patch:
   ```
 
 #### （二）方案二：`thai_kedmanee`（泰语标准键盘）
-切换至“泰语键盘”后，按键映射完全遵循泰国工业标准 **TIS 820-2538 (Kedmanee)**，按键直接上屏：
-
-<img width="1920" height="640" alt="image" src="https://github.com/user-attachments/assets/5fdd89bb-2c48-43f6-95b5-2d1c9a7b47e6" />
+切换至“泰语键盘”后，按键映射完全遵循泰国工业标准 **TIS 820-2538 (Kedmanee)**，按键直接上屏。
 
 
 ### 三、引用来源与鸣谢
