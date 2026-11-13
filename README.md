@@ -14,7 +14,7 @@
 
 ## 🇨🇳 简体中文说明
 
-一套适用于 **[Rime 输入法引擎](https://rime.im/)**（小狼毫 Weasel / 鼠须管 Squirrel / 中州韵 ibus-rime / fcitx5-rime / 同文 Trime）的开源泰语输入方案。架构设计参考 Rime 官方**[rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese)** 与**[rime-ipa](https://github.com/rime/rime-ipa)**。
+一套适用于 **[Rime 输入法引擎](https://rime.im/)**（小狼毫 Weasel / 鼠须管 Squirrel / 中州韵 ibus-rime / fcitx5-rime / 同文 Trime）的开源泰语输入方案。架构设计参考 Rime 官方[rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese) 与[rime-ipa](https://github.com/rime/rime-ipa)。
 
 安装后可在 Rime 输入法菜单中自由勾选启用以下**两套独立方案**：
 
@@ -24,6 +24,8 @@
 | **`thai_kedmanee`** | **泰語鍵盤** | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
 
 ### 一、安装方法
+
+首先安装[Rime 输入法引擎](https://rime.im/)。
 
 #### 方法 1：通过小狼毫（Weasel）图形界面一键获取（推荐）
 1. 右键点击 Windows 任务栏小狼毫图标 → 选择 **“输入法设定 (I)”**。
