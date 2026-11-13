@@ -412,6 +412,7 @@ use_preset_vocabulary: false
     # 標準 TIS 820-2538 Kedmanee 鍵盤映射 (US QWERTY 按鍵 -> 泰文字符)
     kedmanee_map = [
         # Number row (Unshifted)
+        ("`", "_"),
         ("1", "ๅ"),
         ("2", "/"),
         ("3", "-"),
@@ -425,6 +426,7 @@ use_preset_vocabulary: false
         ("-", "ข"),
         ("=", "ช"),
         # Number row (Shifted)
+        ("~", "%"),
         ("!", "+"),
         ("@", "๑"),
         ("#", "๒"),

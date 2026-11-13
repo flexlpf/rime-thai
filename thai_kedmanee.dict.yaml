@@ -9,6 +9,7 @@ version: "2026.11.12"
 sort: original
 use_preset_vocabulary: false
 ...
+_	`
 ๅ	1
 /	2
 -	3
@@ -21,6 +22,7 @@ use_preset_vocabulary: false
 จ	0
 ข	-
 ช	=
+%	~
 +	!
 ๑	@
 ๒	#
