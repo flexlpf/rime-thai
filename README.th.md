@@ -1,4 +1,4 @@
-# rime-thai · แป้นพิมพ์ภาษาไทยสำหรับ Rime
+# rime-thai · แป้นพิมพ์ภาษาไทยสำหรับ Rime (พิมพ์ไทยด้วยอักษรโรมัน / คาราโอเกะ & แป้นพิมพ์เกษมณี)
 
 <p align="center">
   <a href="./README.md">简体中文</a> ·
@@ -6,7 +6,7 @@
   <b>ภาษาไทย</b>
 </p>
 
-**`rime-thai`** คือชุดแป้นพิมพ์ภาษาไทยแบบโอเพนซอร์สสำหรับ **Rime Input Method Engine** (รองรับทั้ง Weasel บน Windows, Squirrel บน macOS, ibus-rime / fcitx5-rime บน Linux และ Trime บน Android) ออกแบบโครงสร้างโดยอ้างอิงจาก `rime-cantonese` และ `rime-ipa`
+**`rime-thai`** คือชุดแป้นพิมพ์ภาษาไทยแบบโอเพนซอร์สสำหรับ **[Rime Input Method Engine](https://rime.im/)** (รองรับทั้ง Weasel บน Windows, Squirrel บน macOS, ibus-rime / fcitx5-rime บน Linux และ Trime บน Android) รองรับทั้ง**การพิมพ์ภาษาไทยด้วยอักษรโรมัน / ตัวอักษรภาษาอังกฤษตามเสียงอ่าน (Thai Phonetic / Romanization IME)** และ**ผังแป้นพิมพ์เกษมณีมาตรฐาน (Kedmanee)** ออกแบบโครงสร้างโดยอ้างอิงจาก [rime-cantonese](https://github.com/CanCLID/rime-cantonese) และ [rime-ipa](https://github.com/rime/rime-ipa)
 
 เมื่อติดตั้งแล้วสามารถเลือกเปิดใช้งานผังแป้นพิมพ์ได้ **2 รูปแบบ**:
 

@@ -1,4 +1,4 @@
-# rime-thai · Thai Input Method for Rime
+# rime-thai · Thai Phonetic (Romanization / Latin Alphabet) & Kedmanee Input Method for Rime
 
 <p align="center">
   <a href="./README.md">简体中文</a> ·
@@ -6,7 +6,7 @@
   <a href="./README.th.md">ภาษาไทย</a>
 </p>
 
-An open-source **Thai input method** package for the **Rime Input Method Engine** (Weasel on Windows, Squirrel on macOS, ibus-rime / fcitx5-rime on Linux, Trime on Android). Architecturally inspired by `rime-cantonese` (Jyutping) and `rime-ipa`.
+An open-source **Thai input method (IME)** package for the **[Rime Input Method Engine](https://rime.im/)** (Weasel on Windows, Squirrel on macOS, ibus-rime / fcitx5-rime on Linux, Trime on Android). Supports both **typing Thai with Latin / English letters (Thai phonetic / romanization input)** and the standard **Thai Kedmanee keyboard layout**. Architecturally inspired by [rime-cantonese](https://github.com/CanCLID/rime-cantonese) (Jyutping) and [rime-ipa](https://github.com/rime/rime-ipa).
 
 Once installed, two independent Thai input schemas can be enabled in Rime:
 

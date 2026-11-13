@@ -1,4 +1,5 @@
-# rime-thai · Rime 泰语输入方案 / Thai Input Method for Rime / แป้นพิมพ์ภาษาไทยสำหรับ Rime
+# rime-thai · Rime 泰语输入法（泰语拉丁字母输入法 / 泰语英文字母拼音输入法 & 泰语标准键盘）
+**Thai Phonetic (Romanization) & Kedmanee Input Method for Rime / แป้นพิมพ์ภาษาไทยสำหรับ Rime**
 
 <p align="center">
   <a href="#简体中文"><b>简体中文</b></a> ·
@@ -12,16 +13,16 @@
 
 <a id="简体中文"></a>
 
-## 🇨🇳 简体中文说明
+## 🇨🇳 简体中文说明（Rime 泰语拉丁字母 / 英文字母输入方案）
 
-一套适用于 **[Rime 输入法引擎](https://rime.im/)**（小狼毫 Weasel / 鼠须管 Squirrel / 中州韵 ibus-rime / fcitx5-rime / 同文 Trime）的开源泰语输入方案。架构设计参考 Rime 官方[rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese) 与[rime-ipa](https://github.com/rime/rime-ipa)。
+**`rime-thai`** 是一套适用于 **[Rime 输入法引擎](https://rime.im/)**（Windows **小狼毫 Weasel** / macOS **鼠须管 Squirrel** / Linux **中州韵 ibus-rime & fcitx5-rime** / Android **同文 Trime**）的开源**泰语输入法（Rime 泰语输入方案）**。支持直接用**英文字母 / 拉丁字母拼写打泰语**（泰语拼音 / 罗马音转写输入法）以及**泰国标准物理键盘盲打**。架构设计参考 Rime 官方 [rime-cantonese (粤拼)](https://github.com/CanCLID/rime-cantonese) 与 [rime-ipa](https://github.com/rime/rime-ipa)。
 
-安装后可在 Rime 输入法菜单中自由勾选启用以下**两套独立方案**：
+安装后可在 Rime 输入法菜单中自由勾选启用以下**两套独立泰语输入方案**：
 
 | 方案 ID | 显示名称 | 适用场景 | 核心特性 |
 | :--- | :--- | :--- | :--- |
-| **`thai_roman`** | **泰語拼音** | 使用拉丁字母拼音（RTGS / Paiboon）输入泰语 | 内置 **23,800+ 条**高频词汇；默认支持**忽略声调盲打**、长短元音容错、首字母简拼、44 辅音及元音部件拆字输入、候选词发音提示开关 (`spelling_hints`) |
-| **`thai_kedmanee`** | **泰語鍵盤** | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
+| **`thai_roman`** | **泰語拼音**<br>*(泰语拉丁字母/英文字母输入法)* | 使用**英文字母 / 拉丁字母拼音**（RTGS / Paiboon 罗马音）输入泰语 | 内置 **23,800+ 条**高频词汇；默认支持**忽略声调盲打**、长短元音容错、首字母简拼、44 辅音及元音部件拆字输入、候选词发音提示开关 (`spelling_hints`) |
+| **`thai_kedmanee`** | **泰語鍵盤**<br>*(泰语标准键盘 Kedmanee)* | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
 
 ### 一、安装方法
 
@@ -268,3 +269,14 @@ patch:
 ## 📜 License
 
 Released under the **[MIT License](./LICENSE)**. Upstream linguistic datasets are used in accordance with their respective open licenses (CC0-1.0 and Apache License 2.0).
+
+---
+
+### 🔍 常见问题与检索索引 (FAQ & Search Keywords)
+
+- **Q: 如何用英文字母 / 拉丁字母在电脑上打泰语？（泰语拉丁字母输入法 / 泰语英文字母输入法）**
+  - A: 安装本仓库的 `thai_roman`（泰语拼音）方案后，无需背诵复杂的泰文物理键盘分布，直接用键盘上的 26 个英文字母输入泰语发音（如打 `sawatdi` 出 `สวัสดี`，打 `khopkhun` 出 `ขอบคุณ`），支持忽略声调盲打与首字母简拼。
+- **Q: 小狼毫（Weasel）/ 鼠须管（Squirrel）/ Rime 怎么添加泰语输入法？**
+  - A: 在小狼毫「输入法设定」→「获取更多输入方案…」中输入 `flexlpf/rime-thai`，即可一键添加「泰語拼音」与「泰語鍵盤（Kedmanee）」两套方案。
+
+> **Keywords / 关键词**：Rime 泰语输入法、Rime 泰语输入方案、小狼毫泰语、鼠须管泰语、中州韵泰语、同文泰语、泰语拉丁字母输入法、泰语英文字母输入法、用英文字母打泰语、泰语拼音输入法、泰语罗马音输入法、泰文音标输入法、泰语标准键盘、Thai Input Method for Rime, Thai Phonetic Input Method, Thai Romanization IME, RTGS, Paiboon, Thai Kedmanee Keyboard, พิมพ์ภาษาไทยด้วยอักษรโรมัน, แป้นพิมพ์ภาษาไทย Rime, พินอินภาษาไทย.
