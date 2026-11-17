@@ -22,7 +22,7 @@
 | 方案 ID | 显示名称 | 适用场景 | 核心特性 |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰语拼音**<br>*(泰语拉丁字母/英文字母输入法)* | 使用**英文字母 / 拉丁字母拼音**（RTGS / Paiboon 罗马音）输入泰语 | 内置 **23,800+ 条**高频词汇；默认支持**忽略声调盲打**、长短元音容错、首字母简拼、44 辅音及元音部件拆字输入、候选词发音提示开关 (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰语拼音·模糊音**<br>*(泰语拼音模糊音容错版)* | **推荐**适用于中文母语者等难以区分或者不习惯使用泰语**送气 / 清浊 / 尾辅音**拼写方法的用户 | 在 `thai_roman` 基础上增加模糊音容错：送气漏 h（`kh→k`、`ph→p`、`th→t`）、清浊不分（`b↔p`、`d↔t`）与尾辅音（`p/t/k→b/d/g`），注音始终准确 |
+| **`thai_roman_fuzzy`** | **（推荐）泰语拼音·模糊音**<br>*(泰语拼音模糊音容错版)* | **（推荐）**适用于中文母语者等难以区分或者不习惯使用泰语**送气 / 清浊 / 尾辅音**拼写方法的用户 | 在 `thai_roman` 基础上增加模糊音容错：送气漏 h（`kh→k`、`ph→p`、`th→t`）、清浊不分（`b↔p`、`d↔t`）与尾辅音（`p/t/k→b/d/g`），注音始终准确 |
 | **`thai_kedmanee`** | **泰语键盘**<br>*(泰语标准键盘 Kedmanee)* | 熟悉泰国标准物理键盘盲打的用户 | 完整对应泰国国家标准 **TIS 820-2538 (Kedmanee)** 键位，无需切换 Windows / macOS 系统语言栏，在 Rime 中一键切换、按键即上屏 |
 
 ### 一、安装方法
@@ -157,7 +157,7 @@ Once installed, three independent Thai input schemas are available:
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | **Recommended** for Chinese native speakers and others who find it hard to distinguish or are unaccustomed to using Thai **aspiration / voicing / final-consonant** spellings | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
+| **`thai_roman_fuzzy`** | **(Recommended)泰語拼音·模糊音** (Thai Romanization + Fuzzy) | **(Recommended)** For Chinese native speakers and others who find it hard to distinguish or are unaccustomed to using Thai **aspiration / voicing / final-consonant** spellings | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ### 1. Installation
@@ -267,7 +267,7 @@ For Chinese native speakers and those accustomed to Chinese pinyin input, Thai d
 | รหัสผัง (Schema ID) | ชื่อที่แสดง | ลักษณะการใช้งาน | จุดเด่น |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (พินอินภาษาไทย / คาราโอเกะ) | พิมพ์ภาษาไทยด้วยอักษรโรมันตามเสียงอ่าน (RTGS / Paiboon) | คลังคำศัพท์ความถี่สูงกว่า **23,800+ คำ**; พิมพ์ได้ทันที**โดยไม่ต้องใส่วรรณยุกต์**, รองรับการย่อเสียงสระสั้น-ยาว, พิมพ์ตัวย่อพยัญชนะต้น, พิมพ์พยัญชนะไทยครบทั้ง 44 ตัว และมีสวิตช์เปิด/ปิดคำใบ้การออกเสียง (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (พินอินภาษาไทยแบบผ่อนปรน) | **แนะนำ**สำหรับผู้พูดภาษาจีนเป็นภาษาแม่และผู้ที่แยกแยะได้ยากหรือไม่คุ้นเคยกับการสะกดเสียง**ธนิต / โฆษะ / ตัวสะกด**ในภาษาไทย | เหมือน `thai_roman` ทุกประการ แต่เพิ่มการผ่อนปรนเสียงพยัญชนะ: ตกหล่นเสียงธนิต (`kh→k`, `ph→p`, `th→t`), สับสนเสียงโฆษะ-อโฆษะ (`b↔p`, `d↔t`) และตัวสะกด (`p/t/k→b/d/g`) พร้อมคำใบ้ที่แม่นยำเสมอ |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (พินอินภาษาไทยแบบผ่อนปรน) | **(แนะนำ)**สำหรับผู้พูดภาษาจีนเป็นภาษาแม่และผู้ที่แยกแยะได้ยากหรือไม่คุ้นเคยกับการสะกดเสียง**ธนิต / โฆษะ / ตัวสะกด**ในภาษาไทย | เหมือน `thai_roman` ทุกประการ แต่เพิ่มการผ่อนปรนเสียงพยัญชนะ: ตกหล่นเสียงธนิต (`kh→k`, `ph→p`, `th→t`), สับสนเสียงโฆษะ-อโฆษะ (`b↔p`, `d↔t`) และตัวสะกด (`p/t/k→b/d/g`) พร้อมคำใบ้ที่แม่นยำเสมอ |
 | **`thai_kedmanee`** | **泰語鍵盤** (แป้นพิมพ์เกษมณี) | พิมพ์สัมผัสตามผังแป้นพิมพ์ภาษาไทยมาตรฐาน | ตรงตามมาตรฐานผลิตภัณฑ์อุตสาหกรรม **มอก. 820-2538 (Kedmanee)** ทุกปุ่ม สลับภาษาภายใน Rime ได้ทันทีโดยไม่ต้องเปลี่ยนภาษาของระบบปฏิบัติการ |
 
 ### 1. วิธีการติดตั้ง (Installation)
