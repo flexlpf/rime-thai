@@ -13,12 +13,14 @@ Once installed, three independent Thai input schemas can be enabled in Rime:
 | Schema ID | Display Name | Use Case | Key Features |
 | :--- | :--- | :--- | :--- |
 | **`thai_roman`** | **泰語拼音** (Thai Romanization) | Type Thai phonetically using Latin letters (RTGS / Paiboon) | **23,800+ core words** ranked by corpus frequency; **tone-free typing** by default, vowel-length tolerance, initial-letter abbreviations, single-character lookup for all 44 consonants & vowel marks, and configurable pronunciation hints (`spelling_hints`) |
-| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | Learners (e.g. Chinese speakers) who cannot reliably distinguish Thai **aspiration / voicing / final-consonant** contrasts | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
+| **`thai_roman_fuzzy`** | **泰語拼音·模糊音** (Thai Romanization + Fuzzy) | **Recommended** for Chinese native speakers and others who find it hard to distinguish or are unaccustomed to using Thai **aspiration / voicing / final-consonant** spellings | Same as `thai_roman`, plus fuzzy tolerance: dropped-aspiration (`kh→k`, `ph→p`, `th→t`), voicing confusion (`b↔p`, `d↔t`) and final-consonant (`p/t/k→b/d/g`), with always-accurate hints |
 | **`thai_kedmanee`** | **泰語鍵盤** (Thai Kedmanee) | Touch-typing with the standard Thai keyboard layout | Full **TIS 820-2538 (Kedmanee)** national standard layout inside Rime without switching OS language bars; direct single-key commit |
 
 ---
 
 ## 1. Installation
+
+First install the [Rime Input Method Engine](https://rime.im/); for Rime configuration details refer to the official Rime documentation (there is hardly anything to configure).
 
 ### Method 1: Via Weasel GUI on Windows (Recommended)
 1. Right-click the Weasel tray icon → select **"Input Method Settings (輸入法設定)"**.
@@ -27,7 +29,7 @@ Once installed, three independent Thai input schemas can be enabled in Rime:
    ```text
    flexlpf/rime-thai
    ```
-4. Check **"泰語拼音"**, **"泰語拼音·模糊音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy.
+4. Check **"泰語拼音"**, **"泰語拼音·模糊音"** and/or **"泰語鍵盤"** in the pop-up dialog and confirm to deploy. Use `Ctrl` + `grave` (the `grave` key is above Tab, to the left of the `1` key) to switch the active input method.
 
 ### Method 2: Via `plum` (`rime-install`) CLI
 ```bash
@@ -52,7 +54,7 @@ Then run **Deploy (重新部署)**.
 ### Schema 1: `thai_roman` (Thai Romanization)
 
 #### A. Word & Phrase Input (Tone-Free by Default)
-You do **not** need to type tone marks for daily typing. Speller algebra automatically handles tone-free input, short/long vowel tolerance (`aa/a`, `ii/i`, `uu/u`, `ee/e`, `oo/o`), Paiboon variants (`bp/p`, `dt/t`, `g/k`, `j/ch`, `eu/ue`, `er/oe`, `or/oo`), and syllable initials:
+The lexicon is encoded with **RTGS (Royal Society of Thailand transcription) + long/short vowel distinction + tone digits 1–5**, and Rime `speller/algebra` automatically derives **tone-free typing**, **short/long vowel abbreviation**, **initial-letter abbreviation** and **Paiboon spelling tolerance** (`bp/p`, `dt/t`, `g/k`, `j/ch`, `eu/ue`, `er/oe`, `or/oo`):
 
 | Thai | Meaning | Tone-Free Input (Default) | Variant / Long Vowel | With Tone Numbers (1-5) | Initials Abbrev |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -99,7 +101,7 @@ By default, romanized pronunciation hints are shown next to candidates (e.g., `�
 
 ### Schema 2: `thai_roman_fuzzy` (Thai Romanization + Fuzzy)
 
-Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`), **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), and **final consonants** (`p`/`t`/`k`), which many Chinese speakers find hard to distinguish by ear. The fuzzy schema derives extra tolerance spellings via `speller/algebra` on top of the `thai_roman` lexicon (which keeps accurate codes, so candidate hints are **always accurate**):
+For Chinese native speakers and those accustomed to Chinese pinyin input, Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`, `t`–`th`), **voiced vs. voiceless** onsets (`b`–`p`, `d`–`t`), and **final consonants** (`p`/`t`/`k`) — contrasts that are hard to hear and involve different typing habits, so Chinese speakers often find them hard to adapt to. The fuzzy schema derives tolerant spellings via `speller/algebra` on top of the `thai_roman` lexicon (which keeps accurate codes, so candidate hints are **always accurate**):
 
 | Fuzzy Direction | Meaning | Type | Example | Matches |
 | :--- | :--- | :--- | :--- | :--- |
@@ -110,7 +112,12 @@ Thai distinguishes **aspirated vs. unaspirated** onsets (`k`–`kh`, `p`–`ph`,
 | `d ↔ t` | voicing confusion | bidirectional | `tii` / `dong` | **ดี** / **ต้อง** |
 | final `p/t/k → b/d/g` | final-consonant tolerance | unidirectional | `krab` | **ครับ** |
 
-> Direction note: dropped-aspiration rules are **unidirectional** — typing the unaspirated form (`k` / `p` / `t`) surfaces aspirated candidates (`kh` / `ph` / `th`), but typing `kh` / `ph` / `th` does **not** surface unaspirated candidates. The `b↔p` and `d↔t` voicing rules are bidirectional. Final-consonant rules are unidirectional: typing `b` / `d` / `g` at the end surfaces accurate `p` / `t` / `k` finals (e.g. `krab` → **ครับ**). `b↔ph` is deliberately **not** provided (most users can distinguish it). Candidate hints always show the **accurate** romanization, not the fuzzy spelling. If you don't need fuzzy input, just use `thai_roman`; both schemas can be enabled simultaneously and switched on demand.
+> To reduce duplicate candidates:
+> 1. Dropped-aspiration rules are **unidirectional** — typing the unaspirated form (`k` / `p` / `t`) surfaces aspirated candidates (`kh` / `ph` / `th`), but typing `kh` / `ph` / `th` does **not** surface unaspirated candidates;
+> 2. Voicing rules (`b↔p`, `d↔t`) are bidirectional; final-consonant rules are unidirectional (`p→b`, `t→d`, `k→g`; typing `b` / `d` / `g` matches the accurate `p` / `t` / `k`);
+> 3. `b↔ph` is deliberately **not** provided (most users can distinguish it).
+> All fuzzy-matched candidates show the **accurate** romanization (e.g. typing `krab` yields **ครับ**; the hint shows `khrap4`, not `krab`).
+> If you don't need fuzzy input, just use the precise `thai_roman`; both schemas can be enabled and switched on demand.
 
 ---
 
@@ -139,16 +146,16 @@ Follows the Thai Industrial Standard **TIS 820-2538 (Kedmanee)** layout with dir
 ## 3. References & Acknowledgements
 
 ### References & Data Sources
-1. **Romanization Standard**: Royal Society of Thailand, *Principles of Romanization for Thai Script by Transcription Method (RTGS)*, 1999; and Paiboon transcription system.
+1. **Romanization Standard**: Royal Society of Thailand, *Principles of Romanization for Thai Script by Transcription Method (RTGS)*, 1999; and the Paiboon practical phonetic system.
 2. **Keyboard Standard**: Thai Industrial Standards Institute, **TIS 820-2538** (*Standard for Thai Character Keys on Computer Keyboards - Kedmanee Layout*), 1995.
 3. **Word Frequency Corpus**: **Thai National Corpus (TNC)**, Department of Linguistics, Faculty of Arts, Chulalongkorn University (`pythainlp/corpus/tnc_freq.txt`, CC0-1.0 Public Domain).
-4. **IPA Pronunciation Lexicon**: Charin Polpanumas & Amazon Web Services (AWS Labs), `fastthaig2p_ipa.json` ([awslabs/FastThaiG2P](https://github.com/awslabs/FastThaiG2P), Apache License 2.0).
+4. **IPA Pronunciation Lexicon**: Charin Polpanumas & AWS Labs, `fastthaig2p_ipa.json` ([FastThaiG2P](https://github.com/awslabs/FastThaiG2P), Apache License 2.0).
 
 ### Acknowledgements
-- **[Rime Input Method Engine](https://rime.im/)**: Created by GONG Chen (@lotem) and the Rime open-source community.
-- **[PyThaiNLP Project](https://github.com/PyThaiNLP/pythainlp)**: Wannaphong Phatthiyaphaibun and contributors for open-source Thai NLP corpora and tools.
-- **[FastThaiG2P](https://github.com/awslabs/FastThaiG2P) & [TLTK](https://github.com/attapol/tltk)**: Charin Polpanumas and Attapol Thamrongrattanarit (Chulalongkorn University).
-- **[rime-cantonese](https://github.com/CanCLID/rime-cantonese) & [rime-ipa](https://github.com/rime/rime-ipa)**: Inspiration for modular dictionary organization and speller algebra.
+- **[Rime Input Method Engine (中州韻)](https://rime.im/)**: thanks to GONG Chen (@lotem) and the Rime open-source community.
+- **[PyThaiNLP Project](https://github.com/PyThaiNLP/pythainlp)**: thanks to Wannaphong Phatthiyaphaibun and the PyThaiNLP community.
+- **[FastThaiG2P](https://github.com/awslabs/FastThaiG2P) & [TLTK](https://github.com/attapol/tltk)**: thanks to Charin Polpanumas and the Chulalongkorn University language-technology team.
+- **[rime-cantonese (Jyutping)](https://github.com/CanCLID/rime-cantonese) & [rime-ipa](https://github.com/rime/rime-ipa)**: architecture and speller-algebra design reference.
 
 ---
 
